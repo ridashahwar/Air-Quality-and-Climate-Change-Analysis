@@ -1,66 +1,86 @@
-# Predicting-Stock-Movements-Using-Sentiment-Analysis-and-Machine-Learning
+# Air Quality and Climate Change Analysis Pipelines
 
-## Overview
-This project explores the relationship between sentiment in news headlines and stock price movements. Using a combination of historical stock data, sentiment analysis, and machine learning, it predicts whether the stock price will increase on the following day.
+This repository contains two robust data pipelines designed for distinct datasets and purposes:
 
-### Stocks Analyzed:
-- **ONCO**
-- **CNEY**
-- **TNXP**
-- **APLD**
-- **KTTA**
-
-### Project Duration:
-Data spans from early 2021 to October 2024.
+1. **Structured Data Pipeline**: Processes air quality data for predictive modeling.
+2. **Unstructured Data Pipeline**: Analyzes Reddit discussions related to climate change using natural language processing (NLP).
 
 ---
 
-## Features
+## Project Overview
 
-### 1. Data Extraction
-- **Libraries Used:**
-  - `yfinance`: Historical stock data.
-  - `BeautifulSoup`: Web scraping for news headlines.
-  - `pandas`: Data manipulation.
-- **Outputs:**
-  - Historical stock data for price trends.
-  - News headlines related to each stock.
+### Structured Data Pipeline
+This pipeline prepares structured air quality data from OpenAQ for machine learning applications, focusing on predictive modeling of pollutant levels. Key features include:
 
-### 2. Sentiment Analysis
-- **Libraries Used:** TextBlob and VADER.
-- **Objective:** Classify news articles as Positive, Neutral, or Negative.
-- **Results:**
-  - Example sentiment scores:
-    - **CNEY:** 0.34 (highest)
-    - **TNXP:** 0.0011 (lowest)
+- **Data Source**: OpenAQ air quality dataset.
+- **Objectives**:
+  - Ensure data integrity through cleaning and transformation.
+  - Engineer meaningful features for model training.
 
-### 3. Time Series Analysis
-- Decomposed stock price time series into trend, seasonality, and residuals.
-- Stationarity checked using the Augmented Dickey-Fuller (ADF) test.
-- Autocorrelation plots used for ARIMA modeling insights.
+### Unstructured Data Pipeline
+This pipeline processes unstructured text data from Reddit discussions to perform sentiment analysis and topic modeling, offering insights into public discourse on climate change.
 
-### 4. Machine Learning Predictions
-- **Model Used:** Random Forest Classifier.
-- **Features:**
-  - Moving averages (10-day and 20-day).
-  - Sentiment scores.
-  - Previous closing prices.
-- **Results:**
-  - RMSE values highlight prediction accuracy (e.g., ONCO: 17.44, APLD: 0.36).
-
-### 5. Visualizations
-- Sentiment distributions (bar charts).
-- Time series plots for stock prices.
-- Scatter plots comparing actual vs. predicted prices.
+- **Data Source**: Reddit comments from climate-related subreddits.
+- **Objectives**:
+  - Extract and normalize text data.
+  - Identify sentiment and key discussion topics.
 
 ---
 
-## Files
-- **`Stock_Analysis_1.ipynb`**: Contains code for data extraction, sentiment analysis, and preprocessing.
-- **`Stock_Analysis_2.ipynb`**: Includes time series analysis, machine learning, and visualization code.
-- **`Predicting Stock Movements Using Sentiment Analysis and Machine Learning.pdf`**: Detailed project report.
+## Pipeline Details
 
----
+### 1. Structured Data Pipeline
 
-## Conclusion
-This project demonstrates the impact of sentiment analysis on stock price predictions. It highlights challenges such as stock volatility and suggests future work using advanced models like LSTM and granular sentiment data.
+#### Steps:
+1. **Data Ingestion**
+   - Load raw data and inspect for missing values, distributions, and potential quality issues.
+   - Key columns: `location`, `parameter` (pollutant type), `value`, and `datetime`.
+
+2. **Data Cleaning and Transformation**
+   - Handle missing values and normalize datetime fields.
+   - Encode categorical features like `location` and `parameter`.
+
+3. **Feature Engineering**
+   - Aggregate daily pollutant levels.
+   - Add statistical (e.g., mean, standard deviation) and temporal features (e.g., day-of-week).
+
+4. **Data Splitting**
+   - Split into training and testing sets (80/20 split).
+
+5. **Model Evaluation Preparation**
+   - Incorporate metrics like R² score and Mean Squared Error.
+   - Enable cross-validation for robust model performance.
+
+#### Results:
+- Enhanced dataset integrity with added predictive features.
+- Initial modeling demonstrates strong performance with significant R² scores.
+
+### 2. Unstructured Data Pipeline
+
+#### Steps:
+1. **Data Ingestion and Exploration**
+   - Load Reddit comments into a DataFrame and inspect shape and quality.
+   - Key columns: `self_text`, `subreddit`, `author_name`, `created_time`, and `score`.
+
+2. **Data Cleaning and Transformation**
+   - Normalize text: convert to lowercase, remove punctuation, tokenize, and lemmatize.
+   - Remove stop words and irrelevant data.
+
+3. **Feature Engineering**
+   - Perform sentiment analysis using the VADER analyzer.
+   - Generate n-grams and perform topic modeling with Latent Dirichlet Allocation (LDA).
+
+4. **Data Splitting**
+   - Split into training and testing sets (80/20 split).
+
+5. **Model Evaluation**
+   - Train logistic regression for sentiment classification.
+   - Evaluate with metrics like accuracy, precision, recall, and F1-score.
+
+#### Results:
+- **Sentiment Analysis**:
+  - Sentiment distribution: 65% neutral, 25% positive, 10% negative.
+- **Topic Modeling**:
+  - Identified key themes: climate policy, energy alternatives, public skepticism.
+- **Model Performance**:
+  - Achieved 99% accuracy with high precision and recall.
